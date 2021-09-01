@@ -13,7 +13,14 @@ const empleadoSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    empleos: [{ type: mongoose.Schema.ObjectId, ref: "Empleos"}],
+    empleos: [],
+});
+
+empleadoSchema.virtual('id').get(function() {
+    return this._id.toHexString();
+});
+empleadoSchema.set('toJSON', {
+    virtuals: true
 });
 
 module.exports = mongoose.model('Empleado', empleadoSchema)

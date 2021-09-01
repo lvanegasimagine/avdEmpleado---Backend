@@ -20,18 +20,18 @@ const getEmpleado = (async (req, res) => {
     }
 });
 
-const getByIdEmpleado = (async, (req , res)=>{
+const getByIdEmpleado = (req , res)=>{
    try {
        res.status(200).json({
           id: req.params.id
        })
-       
+    
    } catch (error) {
       res.status(200).json({
         error: error
      })
    }
-});
+}
 
 const addEmpleado = (async (req , res)=>{
 
@@ -58,7 +58,7 @@ const addEmpleado = (async (req , res)=>{
     }
 });
 
-const updateEmpleado = (async, (req , res)=>{
+const updateEmpleado = (req , res)=>{
     try {
         res.status(200).json({
            id: req.params.id
@@ -69,9 +69,9 @@ const updateEmpleado = (async, (req , res)=>{
          error: error
       })
     }
-});
+}
 
-const deleteEmpleado = (async, (req , res)=>{
+const deleteEmpleado = (req , res)=>{
     try {
         res.status(200).json({
            id: req.params.id
@@ -82,7 +82,7 @@ const deleteEmpleado = (async, (req , res)=>{
          error: error
       })
     }
-});
+}
 
 module.exports = {
     getEmpleado,
