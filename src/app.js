@@ -6,8 +6,8 @@ const cors = require('cors');
 require('dotenv/config');
 
 //Import Routes
-const productsRouter = require('./routes/auth.routes');
-
+// const productsRouter = require('./routes/auth.routes');
+const empleadoRouter = require('./routes/empleado.routes');
 const api = process.env.API_URL;
 
 app.use(cors());
@@ -16,7 +16,8 @@ app.options('*', cors());
 app.use(bodyParser.json());
 
 //Routers
-app.use(`/empleados`, productsRouter);
+// app.use(`/empleados`, productsRouter);
+app.use(process.env.API_URL + '/empleados', empleadoRouter);
 
 mongoose.connect(process.env.CONNECTION_STRING,{ useNewUrlParser: true, useUnifiedTopology: true, dbName: process.env.DB_NAME }).then(() => {
     console.log('Database Connection is ready...')
