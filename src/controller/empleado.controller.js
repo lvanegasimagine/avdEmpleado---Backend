@@ -11,14 +11,14 @@ const getEmpleado = (async (req, res) => {
             res.status(500).json({status: false, message: "No hay registro de empleados"})
         }else{
             res.status(200).json({
-                ok: true,
+                status: true,
                 data: empleadoList
             });
         }
         
     } catch (error) {
         res.status(500).json({
-            ok: false,
+            status: false,
             error: error
         });
     }
@@ -36,17 +36,18 @@ const getByIdEmpleado = (async (req , res)=>{
         
         if(!empleadoOne){
             res.status(500).json({
-                error: err,
+                status: err,
                 success: false
             })
         }
-        res.send(empleadoOne);
-    
-
+        res.status(200).json({
+            status: true,
+            data: empleadoOne
+        });
         
     } catch (error) {
         res.status(500).json({
-            ok: false,
+            status: false,
             error: error
         });
     }
@@ -82,16 +83,16 @@ const addEmpleado = (async (req , res)=>{
         const empleadoDB = await empleado.save();
 
         if(!empleadoDB)
-            return res.status(500).send('The product cannot be created');
+            return res.status(500).send('The empleado cannot be created');
 
         res.status(200).json({
-         status: true,
-         data: empleadoDB
-     });
+            status: true,
+            data: empleadoDB
+        });
     }
     catch (error) {
       res.status(500).json({
-             ok: false,
+             status: false,
              error: error
       });
     }
@@ -141,18 +142,28 @@ const updateEmpleado =(async (req , res)=>{
     }
 });
 
-const deleteEmpleado = (req , res)=>{
-    try {
-        res.status(200).json({
-           id: req.params.id
-        })
-        
-    } catch (error) {
-       res.status(200).json({
-         error: error
-      })
+const deleteEmpleado = (async (req , res)=>{
+    // Primero valida si el id es el correcto.
+    if(!mongoose.isValidObjectId(req.params.id)){
+        return res.status(400).send('ID Invalido');
     }
-}
+
+    Empleado.findByIdAndRemove(req.params.id).then( empleado => {
+        if(empleado){
+            return res.status(200).json({
+                status: true,
+                message: 'El empleado ha sido eliminado'
+            });
+        }else{
+            return res.status(400).json({
+                status: false,
+                message: 'empleado not encontrado'
+            });
+        }
+    }).catch(err => {
+        return res.status(500).json({status: false, error: err});
+    })
+});
 
 module.exports = {
     getEmpleado,
