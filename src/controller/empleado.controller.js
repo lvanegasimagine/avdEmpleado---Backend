@@ -2,16 +2,19 @@ const Empleado = require('../models/Empleado');
 
 
 const getEmpleado = (async (req, res) => {
-
     try {
+
         const empleadoList = await Empleado.find();
-     if(!empleadoList){
-            res.status(500).json({success: false})
+        
+        if(!empleadoList){
+            res.status(500).json({status: false, message: "No hay registro de empleados"})
+        }else{
+            res.status(200).json({
+                ok: true,
+                data: empleadoList
+            });
         }
-     res.status(200).json({
-            ok: true,
-            data: empleadoList
-        });
+        
     } catch (error) {
         res.status(500).json({
             ok: false,
