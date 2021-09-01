@@ -57,26 +57,43 @@ const addEmpleado = (async (req , res)=>{
     const existeEmail = await Empleado.findOne({email: req.body.email});
 
     if(existeEmail) return res.status(400).json({status: true, message: 'Email ya registrado'});
+
     try {
+
         const empleado = new Empleado({
             nombre: req.body.nombre,
-            apellido: req.body.apellido,
+            direccion: req.body.direccion,
+            fechaNacimiento: req.body.fechaNacimiento,
+            inss: req.body.inss,
+            estadoCivil: req.body.estadoCivil,
+            celular: req.body.celular,
             cedula: req.body.cedula,
-            empleos: req.body.empleos
+            email: req.body.email,
+            contacto: req.body.contacto,
+            area: req.body.area,
+            estudios: req.body.estudios,
+            fechaInicio: req.body.fechaInicio,
+            hijos: req.body.hijos,
+            laboral: req.body.laboral,
+            referencias: req.body.referencias,
+            usuario: req.body.usuario,
         })
- 
+
         const empleadoDB = await empleado.save();
- 
+
+        if(!empleadoDB)
+            return res.status(500).send('The product cannot be created');
+
         res.status(200).json({
          status: true,
          data: empleadoDB
      });
- 
-    } catch (error) {
-         res.status(500).json({
+    }
+    catch (error) {
+      res.status(500).json({
              ok: false,
              error: error
-         });
+      });
     }
 });
 
