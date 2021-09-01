@@ -13,7 +13,7 @@ const empleadoSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    contacto: [],
+    empleos: [{ type: mongoose.Schema.ObjectId, ref: "Empleos"}],
 });
 
 module.exports = mongoose.model('Empleado', empleadoSchema)

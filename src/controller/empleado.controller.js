@@ -27,7 +27,7 @@ const addEmpleado = (async (req , res)=>{
            nombre: req.body.nombre,
            apellido: req.body.apellido,
            cedula: req.body.cedula,
-           contacto: req.body.contacto
+           empleos: req.body.empleos
        })
 
        const empleadoDB = await empleado.save();
