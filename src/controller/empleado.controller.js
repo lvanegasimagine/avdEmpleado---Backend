@@ -20,33 +20,76 @@ const getEmpleado = (async (req, res) => {
     }
 });
 
+const getByIdEmpleado = (async, (req , res)=>{
+   try {
+       res.status(200).json({
+          id: req.params.id
+       })
+       
+   } catch (error) {
+      res.status(200).json({
+        error: error
+     })
+   }
+});
+
 const addEmpleado = (async (req , res)=>{
 
-   try {
-       const empleado = new Empleado({
-           nombre: req.body.nombre,
-           apellido: req.body.apellido,
-           cedula: req.body.cedula,
-           empleos: req.body.empleos
-       })
+    try {
+        const empleado = new Empleado({
+            nombre: req.body.nombre,
+            apellido: req.body.apellido,
+            cedula: req.body.cedula,
+            empleos: req.body.empleos
+        })
+ 
+        const empleadoDB = await empleado.save();
+ 
+        res.status(200).json({
+         status: true,
+         data: empleadoDB
+     });
+ 
+    } catch (error) {
+         res.status(500).json({
+             ok: false,
+             error: error
+         });
+    }
+});
 
-       const empleadoDB = await empleado.save();
-
+const updateEmpleado = (async, (req , res)=>{
+    try {
+        res.status(200).json({
+           id: req.params.id
+        })
+        
+    } catch (error) {
        res.status(200).json({
-        status: true,
-        data: empleadoDB
-    });
+         error: error
+      })
+    }
+});
 
-   } catch (error) {
-        res.status(500).json({
-            ok: false,
-            error: error
-        });
-   }
+const deleteEmpleado = (async, (req , res)=>{
+    try {
+        res.status(200).json({
+           id: req.params.id
+        })
+        
+    } catch (error) {
+       res.status(200).json({
+         error: error
+      })
+    }
 });
 
 module.exports = {
     getEmpleado,
-    addEmpleado
+    getByIdEmpleado,
+    addEmpleado,
+    updateEmpleado,
+    updateEmpleado,
+    deleteEmpleado
 }
 
