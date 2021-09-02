@@ -157,7 +157,7 @@ const deleteEmpleado = (async (req , res)=>{
         }else{
             return res.status(400).json({
                 status: false,
-                message: 'empleado not encontrado'
+                message: 'empleado no Encontrado'
             });
         }
     }).catch(err => {

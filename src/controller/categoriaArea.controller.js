@@ -1,3 +1,4 @@
+const { id } = require('@hapi/joi/lib/base');
 const mongoose = require('mongoose');
 const CategoriaArea = require('../models/CategoriaArea');
 
@@ -99,9 +100,31 @@ const updateCategoriaArea = (async (req, res) => {
     }
 
 });
+
+const deleteCategoriaArea = (async (req, res) => {
+    try {
+        if(!mongoose.isValidObjectId(req.params.id)){
+            return res.status(400).json({status: false, message: 'Id Invalido'});
+        }
+
+        CategoriaArea.findByIdAndRemove(req.params.id).then( empleado => {
+            if(empleado){
+                return res.status(200).json({status: true, message: 'Categoria Eliminada'})
+            }else{
+                return res.status(400).json({status: false, message: 'Categoria no Encontrada'})
+            }
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            error: error
+        })
+    }
+})
 module.exports = {
     getCategoriaArea,
     getByIdCategoriaArea,
     addCategoriaArea,
-    updateCategoriaArea
+    updateCategoriaArea,
+    deleteCategoriaArea
 }
