@@ -72,9 +72,36 @@ const addCategoriaArea = (async (req,res) => {
     }
 });
 
+const updateCategoriaArea = (async (req, res) => {
 
+    try {
+        if(!mongoose.isValidObjectId(req.params.id)){
+            res.status(400).json({status: false, message: 'Id invalido'})
+        }
+
+        const categoriaAc = await CategoriaArea.findByIdAndUpdate(
+            req.params.id,
+            {
+                nombre: req.body.nombre
+            },
+            {new: true}
+        )
+
+        res.status(200).json({
+            status: true,
+            data: categoriaAc
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            error: error
+        })
+    }
+
+});
 module.exports = {
     getCategoriaArea,
     getByIdCategoriaArea,
-    addCategoriaArea
+    addCategoriaArea,
+    updateCategoriaArea
 }

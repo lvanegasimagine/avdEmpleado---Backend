@@ -7,6 +7,8 @@ const categoriaArea = mongoose.Schema({
         min: 4,
         max: 20
     }
+},{
+    timestamps: true
 })
 
 categoriaArea.virtual('id').get(function() {
