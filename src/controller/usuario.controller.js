@@ -28,7 +28,7 @@ const getByIdUsuario = (async (req,res) => {
             res.status(400).json({status: false, message: 'Id invalido'})
         }
 
-        const usuarioOne = await Usuario.findOne(req.params.id);
+        const usuarioOne = await Usuario.findById(req.params.id);
 
         res.status(200).json({
             status: true,
@@ -43,6 +43,12 @@ const getByIdUsuario = (async (req,res) => {
 });
 
 const addUsuario = (async (req, res) => {
+
+    const existeEmail = await Usuario.findOne(req.params.id);
+
+    if(existeEmail){
+        return res.status(400).json({status: false, message: 'Ya existe usuario con este email'})
+    }
     try {
         const usuario = new Usuario({
             nombre: req.body.nombre,
