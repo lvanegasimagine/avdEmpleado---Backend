@@ -8,6 +8,7 @@ require('dotenv/config');
 //Import Routes
 
 const empleadoRouter = require('./routes/empleado.routes');
+const categoriaAreaRouter = require('./routes/categoriaArea.routes');
 
 const api = process.env.API_URL;
 
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 //Routers
 
 app.use(`${api}/empleados`, empleadoRouter);
+app.use(`${api}/categoria-area`, categoriaAreaRouter);
 
 mongoose.connect(process.env.CONNECTION_STRING,{ useNewUrlParser: true, useUnifiedTopology: true, dbName: process.env.DB_NAME }).then(() => {
     console.log('La conexión a la BD está lista...')
