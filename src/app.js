@@ -9,6 +9,7 @@ require('dotenv/config');
 
 const empleadoRouter = require('./routes/empleado.routes');
 const categoriaAreaRouter = require('./routes/categoriaArea.routes');
+const usuarioRouter = require('./routes/usuario.routes');
 
 const api = process.env.API_URL;
 
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 
 app.use(`${api}/empleados`, empleadoRouter);
 app.use(`${api}/categoria-area`, categoriaAreaRouter);
+app.use(`${api}/usuario`, usuarioRouter);
 
 mongoose.connect(process.env.CONNECTION_STRING,{ useNewUrlParser: true, useUnifiedTopology: true, dbName: process.env.DB_NAME }).then(() => {
     console.log('La conexión a la BD está lista...')
