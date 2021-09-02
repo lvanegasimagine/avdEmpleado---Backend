@@ -48,13 +48,33 @@ const getByIdCategoriaArea = (async (req , res)=>{
     }
 });
 
+const addCategoriaArea = (async (req,res) => {
+    const existeNombre = await CategoriaArea.findOne({nombre: req.body.nombre});
 
-// router.get('/another-route' , (req , res)=>{
-//     // router code here
-// })
+    if(existeNombre) return res.status(400).json({status: true, message: 'Categoria ya existe!'})
+
+    try {
+        const categoriaAreaRegistro = new CategoriaArea({
+            nombre: req.body.nombre
+        });
+
+        const categoriaAreaDB = await categoriaAreaRegistro.save();
+
+        res.status(200).json({
+            status: true,
+            data: categoriaAreaDB
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            error: error
+        })
+    }
+});
 
 
 module.exports = {
     getCategoriaArea,
-    getByIdCategoriaArea
+    getByIdCategoriaArea,
+    addCategoriaArea
 }
