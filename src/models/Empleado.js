@@ -52,7 +52,8 @@ const empleadoSchema = mongoose.Schema({
         max: 100
     },
     area: { /// Temporalmente se lo vamos a sugerir
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'CategoriaArea',
         required: true,
     },
     estudios: {

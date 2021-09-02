@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const getEmpleado = (async (req, res) => {
     try {
 
-        const empleadoList = await Empleado.find();
+        const empleadoList = await Empleado.find().populate('area', 'nombre');
         
         if(!empleadoList){
             res.status(500).json({status: false, message: "No hay registro de empleados"})
@@ -32,7 +32,7 @@ const getByIdEmpleado = (async (req , res)=>{
             return res.status(400).send('Id Invalido');
         }
 
-        const empleadoOne = await Empleado.findById(req.params.id);
+        const empleadoOne = await Empleado.findById(req.params.id).populate('area', 'nombre');
         
         if(!empleadoOne){
             res.status(500).json({
