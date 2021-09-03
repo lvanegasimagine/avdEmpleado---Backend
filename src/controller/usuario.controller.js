@@ -80,6 +80,28 @@ const addUsuario = (async (req, res) => {
     }
 });
 
+const loginUsuario = (async (req,res) =>{
+
+    const user = await Usuario.findOne({ email: req.body.email });
+    if (!user) return res.status(400).json({ error: 'Usuario no encontrado' });
+
+    const validPassword = await bcrypt.compare(req.body.password, user.password);
+    if (!validPassword) return res.status(400).json({ error: 'contraseña no válida' })
+
+    try {
+        res.json({
+            error: null,
+            data: user,
+            message: 'exito bienvenido'
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            error:error
+        })
+    }
+});
+
 const updateUsuario = (async (req,res) => {
 
     try {
@@ -112,6 +134,7 @@ const updateUsuario = (async (req,res) => {
         })
     }
 });
+
 const deleteUsuario = (async (req,res) => {
 
     try {
@@ -136,6 +159,7 @@ module.exports = {
     getUsuario,
     getByIdUsuario,
     addUsuario,
+    loginUsuario,
     updateUsuario,
     deleteUsuario
 }

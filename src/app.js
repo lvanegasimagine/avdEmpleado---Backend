@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 app.use(`${api}/empleados`, empleadoRouter);
 app.use(`${api}/categoria-area`, categoriaAreaRouter);
 app.use(`${api}/usuario`, usuarioRouter);
+app.use(`${api}/login`, usuarioRouter);
 
 mongoose.connect(process.env.CONNECTION_STRING,{ useNewUrlParser: true, useUnifiedTopology: true, dbName: process.env.DB_NAME }).then(() => {
     console.log('La conexión a la BD está lista...')
