@@ -68,7 +68,8 @@ const empleadoSchema = mongoose.Schema({
     laboral: [],
     referencias: [],
     usuario: { /// temporalmente se lo vamos a sugerir
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario'
     }
 },{
     timestamps: true

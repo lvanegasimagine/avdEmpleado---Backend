@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const getEmpleado = (async (req, res) => {
     try {
 
-        const empleadoList = await Empleado.find().populate('area', 'nombre');
+        const empleadoList = await Empleado.find().populate('area', 'nombre').populate('usuario', ['nombre', 'email']);
         
         if(!empleadoList){
             res.status(500).json({status: false, message: "No hay registro de empleados"})

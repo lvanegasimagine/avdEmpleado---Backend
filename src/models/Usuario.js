@@ -42,6 +42,8 @@ const usuarioSchema = mongoose.Schema({
         default: false
     },
     
+},{
+    timestamps: true
 });
 
 usuarioSchema.virtual('id').get(function() {
