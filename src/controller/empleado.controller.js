@@ -32,7 +32,7 @@ const getByIdEmpleado = (async (req , res)=>{
             return res.status(400).send('Id Invalido');
         }
 
-        const empleadoOne = await Empleado.findById(req.params.id).populate('area', 'nombre');
+        const empleadoOne = await Empleado.findById(req.params.id).populate('area', 'nombre').populate('usuario', ['nombre','email']);
         
         if(!empleadoOne){
             res.status(500).json({
