@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const { ignore } = require('nodemon/lib/rules');
+const bcrypt = require('bcrypt');
+
 const Usuario = require('../models/Usuario');
 
 const getUsuario = (async (req, res) => {
@@ -44,16 +45,21 @@ const getByIdUsuario = (async (req,res) => {
 
 const addUsuario = (async (req, res) => {
 
-    const existeEmail = await Usuario.findOne(req.params.id);
+    const existeEmail = await Usuario.findOne({email: req.body.email});
 
     if(existeEmail){
         return res.status(400).json({status: false, message: 'Ya existe usuario con este email'})
     }
+
     try {
+
+        const salt = await bcrypt.genSalt(10);
+        const password = await bcrypt.hash(req.body.password, salt);
+
         const usuario = new Usuario({
             nombre: req.body.nombre,
             email: req.body.email,
-            password: req.body.password,
+            password: password,
             direccion: req.body.direccion,
             departamento: req.body.departamento,
             celular: req.body.celular,
