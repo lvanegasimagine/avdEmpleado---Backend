@@ -19,9 +19,14 @@ const empleadoSchema = mongoose.Schema({
     },
     inss: {
         type: String,
-        required: true,
         min: 8,
         max: 8
+    },
+    cargo: {
+        type: String,
+        required: true,
+        min: 4,
+        max:50
     },
     estadoCivil: {
         type: String,
@@ -59,6 +64,7 @@ const empleadoSchema = mongoose.Schema({
     estudios: {
         type: String,
         required: true,
+        default: 'Bachiller'
     },
     fechaInicio: {
         type: Date,

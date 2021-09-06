@@ -5,7 +5,8 @@ const categoriaArea = mongoose.Schema({
         type: String,
         required: true,
         min: 4,
-        max: 20
+        max: 20,
+        default: 'corasco'
     }
 },{
     timestamps: true
