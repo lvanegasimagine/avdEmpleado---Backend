@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const Usuario = require('../models/Usuario');
 
@@ -67,10 +68,14 @@ const addUsuario = (async (req, res) => {
         })
 
         const usuarioDB = await usuario.save();
+        const token = await jwt.sign({
+            data: usuarioDB 
+        }, process.env.SECRET_KEY);
 
         res.status(200).json({
             status: true,
-            data: usuarioDB
+            token: token
+            // data: usuarioDB
         })
     } catch (error) {
         res.status(500).json({
@@ -88,13 +93,21 @@ const loginUsuario = (async (req,res) =>{
     const validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(400).json({ error: 'contraseña no válida' })
 
+    const token = await jwt.sign({
+        data: Usuario.id,
+    }, process.env.SECRET_KEY,{
+        expiresIn: 60*60*24 //expira en 24 hras
+    });
+
     try {
         res.json({
-            error: null,
+            status: true,
             data: user,
+            token: token,
             message: 'exito bienvenido'
         })
     } catch (error) {
+        asadffghjkik
         res.status(500).json({
             status: false,
             error:error
