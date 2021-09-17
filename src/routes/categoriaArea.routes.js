@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { getCategoriaArea,getByIdCategoriaArea, addCategoriaArea, updateCategoriaArea, deleteCategoriaArea} = require('../controller/categoriaArea.controller');
+const verifyToken = require('../middleware/validarToken');
 
-router.get('/' , getCategoriaArea);
+router.get('/' , verifyToken, getCategoriaArea);
 router.get('/:id', getByIdCategoriaArea);
 router.post('/', addCategoriaArea);
 router.put('/:id', updateCategoriaArea);
