@@ -9,7 +9,7 @@ const getUsuario = (async(req , res)=>{
        const usuarioList = await Usuario.find();
 
        if(!usuarioList){
-        res.status(500).json({status: false, message: "No hay registro de empleados"})
+        res.status(500).json({status: false, message: "No hay registro de usuarios"})
         }else{
         res.status(200).json({
             status: true,
@@ -51,6 +51,7 @@ const getUsuarioById = (async (req, res) => {
         });
     }
 });
+
 const addUsuario = async (req, res) => {
 
     const { nombre, email, password} = req.body;
@@ -74,7 +75,7 @@ const addUsuario = async (req, res) => {
         dbUser.password = bcrypt.hashSync(password, salt);
 
         // Generar el JWT
-        const tstatusen = await generarJWT(dbUser.id, nombre);
+        const token = await generarJWT(dbUser.id, nombre);
         // Crear usuario de DB
         await dbUser.save();
 
@@ -84,7 +85,7 @@ const addUsuario = async (req, res) => {
             uid: dbUser.id,
             nombre,
             email,
-            tstatusen
+            token
         });
         
     } catch (error) {
@@ -120,8 +121,8 @@ const loginUsuario = async (req, res) => {
             });
         }
 
-        // Generar el tstatusen
-        const tstatusen = await generarJWT(dbUser.id, dbUser.nombre);
+        // Generar el token
+        const token = await generarJWT(dbUser.id, dbUser.nombre);
 
         // Repuesta exitosa
 
@@ -130,7 +131,7 @@ const loginUsuario = async (req, res) => {
             uid: dbUser.id,
             nombre: dbUser.nombre,
             email: dbUser.email,
-            tstatusen
+            token
         });
 
     } catch (error) {
@@ -150,21 +151,82 @@ const revalidarToken = (async (req, res) => {
     const dbUser = await Usuario.findById(uid);
 
     //Generar el JWT
-    const tstatusen = await generarJWT(uid, dbUser.name);
+    const token = await generarJWT(uid, dbUser.name);
 
     return res.json({
         status: true,
         uid,
         name: dbUser.name,
         email: dbUser.email,
-        tstatusen
+        token
     });
+});
+
+const updateUsuario = (async (req, res) => {
+    try {
+        // Primero valida si el id es el correcto.
+        if(!mongoose.isValidObjectId(req.params.id)){
+            return res.status(400).send('Id Invalido');
+        }
+        const salt = bcrypt.genSaltSync(10);
+
+        const usuarioAc = await Usuario.findByIdAndUpdate(
+            req.params.id,
+            {
+                nombre: req.body.nombre,
+                email: req.body.email,
+                password: bcrypt.hashSync(req.body.password, salt),
+                direccion: req.body.direccion,
+                departamento: req.body.departamento,
+                celular: req.body.celular,
+                isAdmin: req.body.isAdmin,
+                
+            },
+            {new: true}
+        )
+
+        res.status(200).json({
+           status: true,
+           data: usuarioAc
+        })
+        
+    } catch (error) {
+       res.status(200).json({
+           status: false,
+           error: error
+      })
+    }
+});
+
+const deleteUsuario = (async (req, res) => {
+    // Primero valida si el id es el correcto.
+    if(!mongoose.isValidObjectId(req.params.id)){
+        return res.status(400).send('ID Invalido');
+    }
+
+    Usuario.findByIdAndRemove(req.params.id).then( usuario => {
+    if(usuario){
+        return res.status(200).json({
+            status: true,
+            message: 'El Usuario ha sido eliminado'
+        });
+    }else{
+        return res.status(400).json({
+            status: false,
+            message: 'usuario no Encontrado'
+        });
+    }
+    }).catch(err => {
+        return res.status(500).json({status: false, error: err});
+    })
 });
 
 module.exports = {
     getUsuario,
     getUsuarioById,
     addUsuario,
+    loginUsuario,
     revalidarToken,
-    loginUsuario
+    updateUsuario,
+    deleteUsuario
 };
