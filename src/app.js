@@ -16,7 +16,7 @@ const api = process.env.API_URL;
 app.use(cors());
 app.options('*', cors());
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 //Routers
 
