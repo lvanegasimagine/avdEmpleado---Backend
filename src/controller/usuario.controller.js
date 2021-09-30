@@ -1,13 +1,56 @@
 const bcrypt = require('bcrypt');
 const generarJWT = require('../helpers/jwt');
 const Usuario = require('../models/Usuario');
+const mongoose = require('mongoose');
 
-const listUsuario = (req , res)=>{
+const getUsuario = (async(req , res)=>{
 
-   res.send('hello from simple server :)')
+   try {
+       const usuarioList = await Usuario.find();
 
-};
+       if(!usuarioList){
+        res.status(500).json({status: false, message: "No hay registro de empleados"})
+        }else{
+        res.status(200).json({
+            status: true,
+            data: usuarioList
+        });
+    }
+   } catch (error) {
+        res.status(500).json({
+            status: false,
+            msg: 'Por favor hable con el administrador'
+        });
+   }
 
+});
+
+const getUsuarioById = (async (req, res) => {
+    try {
+        // Valida si el id es es el correcto
+        if(!mongoose.isValidObjectId(req.params.id)){
+            return res.status(400).send('Id Invalido');
+        }
+
+        const usuarioOne = await Usuario.findById(req.params.id);
+
+        if(!usuarioOne){
+            res.status(500).json({
+                status: err,
+                success: false
+            });
+        }
+        res.status(200).json({
+            status: true,
+            data: usuarioOne
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            msg: 'Por favor ponerse en contacto con el administrador'
+        });
+    }
+});
 const addUsuario = async (req, res) => {
 
     const { nombre, email, password} = req.body;
@@ -18,7 +61,7 @@ const addUsuario = async (req, res) => {
 
         if(usuario){
             return res.status(400).json({
-                ok: false,
+                status: false,
                 msg: 'El usuario ya existe con ese email'
             });
         }
@@ -31,23 +74,23 @@ const addUsuario = async (req, res) => {
         dbUser.password = bcrypt.hashSync(password, salt);
 
         // Generar el JWT
-        const token = await generarJWT(dbUser.id, nombre);
+        const tstatusen = await generarJWT(dbUser.id, nombre);
         // Crear usuario de DB
         await dbUser.save();
 
         // Generar repuesta exitosa
         return res.status(200).json({
-            ok: true,
+            status: true,
             uid: dbUser.id,
             nombre,
             email,
-            token
+            tstatusen
         });
         
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            ok: false,
+            status: false,
             msg: 'Por favor hable con el administrador'
         });
     }
@@ -62,7 +105,7 @@ const loginUsuario = async (req, res) => {
         
         if(!dbUser){
             return res.status(400).json({
-                ok: false,
+                status: false,
                 msg: 'Correo no valido, favor revisar'
             });
         }
@@ -72,34 +115,34 @@ const loginUsuario = async (req, res) => {
 
         if(!validPassword){
             return res.status(400).json({
-                ok: false,
+                status: false,
                 msg: 'Password incorrecto'
             });
         }
 
-        // Generar el token
-        const token = await generarJWT(dbUser.id, dbUser.nombre);
+        // Generar el tstatusen
+        const tstatusen = await generarJWT(dbUser.id, dbUser.nombre);
 
         // Repuesta exitosa
 
         return res.status(200).json({
-            ok: true,
+            status: true,
             uid: dbUser.id,
             nombre: dbUser.nombre,
             email: dbUser.email,
-            token
+            tstatusen
         });
 
     } catch (error) {
         return res.status(500).json({
-            ok: false,
+            status: false,
             msg: 'Hable con el administrador' + error
         });
     }
 
 };
 
-const revalidarToken = async (req, res) => {
+const revalidarToken = (async (req, res) => {
 
     const {uid} = req;
 
@@ -107,20 +150,21 @@ const revalidarToken = async (req, res) => {
     const dbUser = await Usuario.findById(uid);
 
     //Generar el JWT
-    const token = await generarJWT(uid, dbUser.name);
+    const tstatusen = await generarJWT(uid, dbUser.name);
 
     return res.json({
-        ok: true,
+        status: true,
         uid,
         name: dbUser.name,
         email: dbUser.email,
-        token
+        tstatusen
     });
-};
+});
 
 module.exports = {
-    listUsuario,
+    getUsuario,
+    getUsuarioById,
     addUsuario,
-    loginUsuario,
-    revalidarToken
-}
+    revalidarToken,
+    loginUsuario
+};

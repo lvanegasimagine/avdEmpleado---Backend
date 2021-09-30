@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const { check } = require('express-validator');
-const { listUsuario, addUsuario, loginUsuario, revalidarToken } = require('../controller/usuario.controller');
+const { getUsuario, addUsuario, loginUsuario, revalidarToken, getUsuarioById } = require('../controller/usuario.controller');
 const { validarCampos } = require('../middlewares/validarCampos');
 const { validarJWT } = require('../middlewares/validarJwt');
 
-router.get('/', listUsuario);
+router.get('/', getUsuario);
+router.get('/:id', getUsuarioById);
 
 router.post('/new', [
     check('nombre', 'El nombre es obligatorio').not().isEmpty(),
