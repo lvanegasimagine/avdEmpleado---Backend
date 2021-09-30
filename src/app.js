@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv/config');
@@ -16,7 +16,7 @@ const api = process.env.API_URL;
 app.use(cors());
 app.options('*', cors());
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 //Routers
 
@@ -26,13 +26,13 @@ app.use(`${api}/usuario`, usuarioRouter);
 app.use(`${api}/login`, usuarioRouter);
 
 mongoose.connect(process.env.CONNECTION_STRING,{ useNewUrlParser: true, useUnifiedTopology: true, dbName: process.env.DB_NAME }).then(() => {
-    console.log('La conexión a la BD está lista...')
+    console.log('La conexión a la BD está lista...');
 }).catch((err) => {
     console.error(err);
 })
 
-const PORT = 3000 || 3000
+const PORT = process.env.PORT || 6000;
 app.listen(PORT, () => {
-    console.log('Server is runnig http://localhost:3000/api/v1');
+    console.log(`Server is runnig http://localhost:${process.env.PORT}/api/v1`);
     console.log(api);
 });

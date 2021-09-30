@@ -19,7 +19,7 @@ const usuarioSchema = mongoose.Schema({
         min: 8,
         max: 20
     },
-    direccion: {
+    /*direccion: {
         type: String,
         required: true,
         min: 8,
@@ -40,7 +40,7 @@ const usuarioSchema = mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false
-    },
+    },*/
     
 },{
     timestamps: true
